@@ -14,9 +14,11 @@ app = Flask(__name__)
 app.secret_key = config.APP_SECRET
 app.config['SESSION_COOKIE_NAME'] = 'JSpotify Cookie'
 
-
-
 @app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/login')
 def login():
     sp_oauth = sp()
     auth_url = sp_oauth.get_authorize_url() 
