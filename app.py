@@ -5,6 +5,7 @@ import config
 import time
 import spotipy
 import os
+from song import Song
 
 from spotipy.oauth2 import SpotifyOAuth
 
@@ -50,7 +51,6 @@ def get_token():
         session['token_info'] = token_info
     return token_info 
 
-
 @app.route('/Tracks')
 def Tracks():
     try:
@@ -61,15 +61,23 @@ def Tracks():
     
     sp = spotipy.Spotify(auth=token_info['access_token'])
     top_tracks = sp.current_user_top_tracks(50, 0, "short_term")
-
-    # Extract song names from the top tracks
-    song_names = [song['name'] for song in top_tracks['items']]
-
+    songs = [Song(track['name'], track['popularity'], i+1, track['artists'][0]['name']) for i, track in enumerate(top_tracks['items'])]
     # Pass the list of song names to the template
-    return render_template('test.html', songs=song_names)
+    intervals = {
+    "1-10": 0, "11-20": 0, "21-30": 0, "31-40": 0, "41-50": 0,
+    "51-60": 0, "61-70": 0, "71-80": 0, "81-90": 0, "91-100": 0
+    }
+    for song in songs:
+        popularity = song.popularity
+        lower_bound = ((popularity - 1) // 10) * 10 + 1
+        upper_bound = lower_bound + 9
+        interval_key = f"{lower_bound}-{upper_bound}"
+        intervals[interval_key] += 1
+    labels = list(intervals.keys())
+    counts = list(intervals.values())
+    return render_template('test.html', songs=songs, labels=labels, counts=counts)
 
 
-# Checks to see if token is valid and gets a new token if not
 
 @app.route('/logout')
 def logout():
@@ -78,6 +86,7 @@ def logout():
     if os.path.exists(cache_path):
         os.remove(cache_path)
     return redirect('/')
+
 def sp():
     return SpotifyOAuth(
         client_id=config.CLIENT_ID,

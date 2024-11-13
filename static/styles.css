@@ -10,10 +10,26 @@
             font-size: 60px;
             color: #1DB954;
             text-align: center;
+            
         }
         h2 {
-            color: #555;
+            color: #fffefe;
             text-align: center;
+            margin-bottom: 10px
+            
+        }
+        h4 {
+            text-align: left;
+            margin-left: 5px;
+            margin-top: -1px;
+        }
+        h5{
+            color: #fffefe;
+            text-align: center; 
+        }
+        h6{
+            color: #fffefe;
+            text-align: center; 
         }
         ol {
             max-width: 600px;
@@ -22,12 +38,13 @@
             list-style-type: decimal;
         }
         li {
-            font-size: 18px;
+            font-size: 14px;
             margin: 10px 0;
             padding: 10px;
-            background-color: #fff;
+            color: #ffffff;
+            background-color: #4e4a4a;
             border-radius: 8px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 4px 6px 10px rgba(73, 72, 72, 0.1);
         }
         a  {
             text-decoration: none;
@@ -37,4 +54,9 @@
         }
         a:hover {
             color: #137134;
+        
+        }
+        ol {
+            list-style-type: none;
+            padding-left: 0;
         }
