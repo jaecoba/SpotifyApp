@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <link rel="stylesheet" href="{{url_for('static', filename='styles.css') }}"> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Top Tracks</title>
+    <style>
+        .container {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 5px; /* Adds some space between the list and chart */
+        }
+        .chart-container {
+            width: 600px; /* Desired width for the chart */
+            height: 600px; /* Desired height for the chart */
+            position: relative; /* Keeps canvas within this size */
+        }
+    </style>
+
+
+</head>
+<body>
+    <h4><a href="{{ url_for('logout')}}">Log Out</a></h4>
+    <h1>Spotify Top Tracks</h1>
+    <h2>Top 50 - Short Term</h2>
+    <div class="container">
+        <ol>
+            {% for song in songs %}
+            <li>{{ song.rank }}. {{ song.name }} - {{song.artist }} | Popularity: {{ song.popularity }}</li>
+            {% endfor %}
+        </ol>
+        <div class="chart-container">
+            <h5>How popular are songs from my top 50?</h5>
+            <canvas id="short_term"></canvas>
+            <h6>The Spotify Popularity Index (or Spotify Popularity Score) is a hidden 0-to-100 score that 
+                ranks how popular an artist or track is relative to other artists and tracks on Spotify</h6>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('short_term').getContext('2d');
+        const chartData = {
+            labels: {{labels | tojson}},
+            datasets: [{
+                label: '# of songs in interval',
+                data: {{counts | tojson}}, // Popularity scores
+                backgroundColor: [
+                    "rgb(3, 35, 15)", 
+                    "rgb(6, 55, 24)", 
+                    "rgb(9, 75, 33)", 
+                    "rgb(12, 95, 42)", 
+                    "rgb(15, 115, 51)", 
+                    "rgb(18, 135, 60)", 
+                    "rgb(21, 155, 69)", 
+                    "rgb(24, 175, 78)", 
+                    "rgb(27, 195, 87)", 
+                    "rgb(30, 215, 96)"
+                ],
+                borderColor: [
+                    "rgba(30, 215, 96, 1)", // Border color around each section
+                ]
+                  
+            }]
+        };
+
+        // Create and configure the chart
+        const myChart = new Chart(ctx, {
+            type: 'polarArea', // Type of chart
+            data: chartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: true, 
+                scales: {
+                    r: {  // `r` is for polarArea chart's radial scale
+                        grid: {
+                            color: 'rgba(0, 128, 0, 0.5)',  // Green color with transparency for the dashed line
+                            borderDash: [5, 5],  // Creates dashed lines (5px on, 5px off)
+                        },
+                        angleLines: {
+                            color: 'rgba(30, 215, 96, 0.5)',  // Color for angle lines
+                            borderDash: [3, 6]  // Different dash style for angle lines
+                        }
+                    }
+                },
+                plugins: {
+                    legend: { display: true },
+                    tooltip: { enabled: true}
+                }
+            }
+        });
+    </script>
+</body>
+</html>
