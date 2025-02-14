@@ -1,6 +1,5 @@
 
 from flask import Flask, request, url_for, session, redirect, render_template
-from pagesetup import setup, finish
 import time
 import spotipy
 import os
