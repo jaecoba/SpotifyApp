@@ -19,6 +19,9 @@ app.config['SESSION_COOKIE_NAME'] = 'JSpotify Cookie'
 def index():
     return render_template('index.html')
 
+if __name__ == "__main__":
+    app.run()
+
 @app.route('/login')
 def login():
     sp_oauth = sp()
