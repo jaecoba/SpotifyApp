@@ -4,3 +4,4 @@ __pycache__/
 templates/
 .venv/
 pagesetup.py
+.env

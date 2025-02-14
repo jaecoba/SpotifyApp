@@ -1,10 +1,10 @@
 
 from flask import Flask, request, url_for, session, redirect, render_template
 from pagesetup import setup, finish
-import config
 import time
 import spotipy
 import os
+from dotenv import load_dotenv
 from song import Song
 
 from spotipy.oauth2 import SpotifyOAuth
@@ -12,7 +12,18 @@ from spotipy.oauth2 import SpotifyOAuth
 
 app = Flask(__name__)
 
-app.secret_key = config.APP_SECRET
+
+load_dotenv()
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+TEMPLATE_PATH = "./SpotifyApp/templates"
+APP_SECRET = os.urandom(32)
+
+print(f"CLIENT_ID: {CLIENT_ID}")
+print(f"CLIENT_SECRET: {CLIENT_SECRET}")
+print(f"APP_SECRET: {APP_SECRET}")
+
+app.secret_key = APP_SECRET
 app.config['SESSION_COOKIE_NAME'] = 'JSpotify Cookie'
 
 @app.route('/')
@@ -92,8 +103,8 @@ def logout():
 
 def sp():
     return SpotifyOAuth(
-        client_id=config.CLIENT_ID,
-        client_secret=config.CLIENT_SECRET,
+        client_id=CLIENT_ID,
+        client_secret=CLIENT_SECRET,
         redirect_uri=url_for('redirectPage', _external=True),
         scope="user-library-read user-top-read",
         show_dialog=True)
